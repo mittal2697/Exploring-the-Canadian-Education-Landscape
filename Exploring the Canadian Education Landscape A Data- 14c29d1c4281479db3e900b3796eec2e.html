@@ -1,0 +1,685 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Exploring the Canadian Education Landscape: A Data-Driven Analysis with Python and Tableau</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="14c29d1c-4281-479d-b3e9-00b3796eec2e" class="page sans"><header><img class="page-cover-image" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/maxresdefault.jpeg" style="object-position:center 36.67%"/><h1 class="page-title">Exploring the Canadian Education Landscape: A Data-Driven Analysis with Python and Tableau</h1><p class="page-description"></p></header><div class="page-body"><h3 id="c9c0fcc3-5efa-4089-91d4-8ffac3234715" class=""><strong>By </strong><mark class="highlight-blue"><strong>Prashant Mittal</strong></mark></h3><h3 id="8163949f-1565-43a1-b49c-227cb75a7509" class=""><strong>Data 605: Actionable Visualization &amp; Analytics</strong></h3><h2 id="292acc44-7bba-4f5d-ba99-82632cca085f" class="">Introduction</h2><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="c847514a-e0fb-4b36-aab6-1b59c0027be3"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">The field of education is a vital component of any society&#x27;s development and growth. Canada is known for its quality education system and attracts students from all over the world. In this analysis, I will use data from the Organisation for Economic Co-operation and Development (<strong>OECD</strong>) to explore various aspects of the Canadian Education landscape. With the use of both Python and Tableau, I will delve into the <strong>correlations</strong> between international students, enrollment by province/gender, annual growth rate, and investment in education. The goal is to gain a deeper understanding of the Canadian Education system and identify areas for improvement. By combining the powerful data analysis capabilities of Python and the intuitive visualization capabilities of Tableau, I will present a comprehensive picture of the Canadian Education landscape and a few other countries in comparison.</div></figure><h2 id="9bfc4a09-0f52-48b3-a372-db19194aebb6" class="">Dataset Description</h2><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="deffd8b8-e7b0-48f1-b257-2eb54c199c43"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">All the below-mentioned datasets are related to education and are provided by the Organisation for Economic Co-operation and Development (OECD). Data Source Main URL: <a href="https://stats.oecd.org/Index.aspx?datasetcode=EAG_FIN_RATIO">https://stats.oecd.org/Index.aspx?datasetcode=EAG_FIN_RATIO</a> 
+The datasets cover a range of topics, including education finance, enrollment by gender and program orientation, international student enrollment, expenditure by country, and annual growth rate of expenditure.
+The datasets provide information on different aspects of the education sector in different countries, such as the amount of money spent on education, the number of students enrolled in different programs, the share of international students, and the growth rate of education expenditure. The data is presented in both nominal and real terms, allowing for comparisons between countries over a period of time.
+The datasets are intended to provide policymakers, researchers, and analysts with a comprehensive overview of education-related indicators, facilitating the development of evidence-based policies and decision-making in the education sector.</div></figure><table id="575899ca-411c-4ce7-98ce-343a1f88b0e1" class="simple-table"><tbody><tr id="68f13b78-ee25-42b2-ba11-6b6550e48cc0"><th id="xzjg" class="block-color-brown simple-table-header"><strong>Educational Finance Indicators</strong></th><td id="AvwB" class="" style="width:625px">Public and private expenditure on education as % of GDP, by the level of education, and source of funds&quot;. The dataset provides information on the percentage of Gross Domestic Product (GDP) that is spent on education, broken down by the level of education (primary, secondary, and tertiary) and source of funds (public and private) for different countries.</td></tr><tr id="9215dc55-4215-42e1-8cf5-7afd97e66167"><th id="xzjg" class="block-color-brown simple-table-header"><strong>Enrolment by gender, programme orientation, mode of study, and type of institution</strong></th><td id="AvwB" class="" style="width:625px">The dataset provides a wide range of education-related indicators for different countries, including data on educational attainment, graduation rates, student demographics, and education spending, among others.
+The dataset includes data for a variety of levels of education, including primary, secondary, and tertiary education, as well as vocational education and adult education. The data is available for different years, depending on the country and indicator being considered.</td></tr><tr id="862a30d2-b776-4e62-bf43-f2c23e8c9ab1"><th id="xzjg" class="block-color-brown simple-table-header"><strong><strong>Share of international students and all students by field</strong></strong></th><td id="AvwB" class="" style="width:625px">The dataset provides information on the number of international students enrolled in different fields of study in different countries.
+The data is available for different years, depending on the country and field of study being considered. The fields of study included in the dataset are based on the International Standard Classification of Education (ISCED) framework, which is used to standardize educational classifications across different countries. 
+The data in the dataset is presented in two different formats: as a percentage of the total number of students enrolled in a particular field of study, and as an absolute number of international students enrolled in that field of study.</td></tr><tr id="47ff729b-9e78-478f-a84f-3321e80603c9"><th id="xzjg" class="block-color-brown simple-table-header"><strong><strong>Financial resources invested in education</strong></strong></th><td id="AvwB" class="" style="width:625px">&quot;Education finance by the level of government and programme orientation in public institutions (Sub-national levels)&quot;. The dataset provides information on the amount of money spent on education by level of government (central or sub-national), programme orientation (general or vocational), and type of institution (public or private) in different countries. The data is available for different years, depending on the country and level of government being considered. The dataset provides information on both total expenditure and expenditure per student in each of the categories mentioned above.</td></tr></tbody></table><h3 id="b3a5eaab-a9f9-44f8-8231-85fc9668f6b0" class=""><strong>Data Attributes</strong></h3><table id="d20499ce-808e-4628-a634-c973a2a72681" class="simple-table"><tbody><tr id="afe19029-8609-4cad-8ace-3fde80d828cb"><td id="kexw" class="" style="width:152px"><strong>Variable</strong></td><td id="MPW:" class="" style="width:630px"><strong>Description</strong></td></tr><tr id="0afcb833-5d82-460d-9e5f-b1c1f46b1d2a"><td id="kexw" class="" style="width:152px">Country</td><td id="MPW:" class="" style="width:630px">Name of each country included in the OECD dataset</td></tr><tr id="49f484bb-145a-4e71-96f5-dc802c58e444"><td id="kexw" class="" style="width:152px">ISC11</td><td id="MPW:" class="" style="width:630px">International Standard Classification of Education - Level 11 and it includes all forms of education beyond the post-secondary level, including advanced research programs, doctorates, and professional development programs. Levels: Primary, Secondary, Tertiary, Long and Short Cycle for different levels</td></tr><tr id="4a04410d-1b83-4ad0-805d-ab059f0f63b6"><td id="kexw" class="" style="width:152px">Counterpart_Sector</td><td id="MPW:" class="" style="width:630px">Sector of the economy responsible for financing educational institutions(public and private)</td></tr><tr id="77997647-72b3-4689-ab89-2dcc2db7f380"><td id="kexw" class="" style="width:152px">Value</td><td id="MPW:" class="" style="width:630px">Total expenditure on educational institutions in USD and also in percentage for annual growth rate</td></tr><tr id="6d04bd7a-b2de-4734-b92e-f22f7277d37c"><td id="kexw" class="" style="width:152px">Reference_Sector</td><td id="MPW:" class="" style="width:630px">Sector in which the educational institution is located</td></tr><tr id="3b63272b-22a5-4b55-b044-0efa322cded2"><td id="kexw" class="" style="width:152px">Region</td><td id="MPW:" class="" style="width:630px">Subnational areas within the country, such as provinces or territories</td></tr><tr id="57ca4218-0916-4d5f-821b-ad22e96c321c"><td id="kexw" class="" style="width:152px">Indicator</td><td id="MPW:" class="" style="width:630px">Indicators in education include enrollment rates, graduation rates, and education expenditure per student</td></tr><tr id="5a112535-ad67-40f1-a544-b2468c1098a5"><td id="kexw" class="" style="width:152px">Field</td><td id="MPW:" class="" style="width:630px">Broad category of educational field or program</td></tr><tr id="bdfbec19-74b9-4dbb-a4ba-b3eadc2b7b25"><td id="kexw" class="" style="width:152px">EDUCATION_LEV</td><td id="MPW:" class="" style="width:630px">Level of education and field of study in which 8 levels in the ISCED framework, from Level 0 (pre-primary education) to Level 6 (second stage of tertiary education). Each level is based on a combination of the required duration of education and the educational content, skills, and competencies.</td></tr><tr id="415d8333-9d58-49b5-835c-19ff38b9cbf1"><td id="kexw" class="" style="width:152px">Intensity</td><td id="MPW:" class="" style="width:630px">Full-time or Part-time</td></tr></tbody></table><h2 id="d0b14448-7447-4fb9-9005-237c1d9bd141" class="">Research Question</h2><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="a211861a-fd3e-4f4d-a0be-6d38df215a40"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">How does the distribution of enrollment by gender differ across different program orientations, modes of study, and types of institutions in Canada? Are there any significant trends or patterns in these differences?</div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="e47de35f-336d-4ad6-94aa-4e0a059fff15"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">How can Canadian institutions of higher education use these insights to better attract and support international students in different fields of study? </div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="53759903-555e-4485-9d76-18599bb0e6fb"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">How has education expenditure changed over time in different countries and fields of study in Canada&#x27;s education system?</div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="14dc8c18-df11-466f-a02b-17bbc00893e2"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">How has the annual growth rate in education expenditure from 2012 to 2019 varied across different countries?</div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="c1e08a4f-db92-4a4d-a917-b99d8e84741f"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">What is the total expenditure on educational institutions per full-time equivalent student in Canada at the sub-national level in 2019?</div></figure><h2 id="ef7c4c48-85a7-4adf-b0e7-cee75e71a435" class="">Tools Used</h2><ul id="9251f23c-6a0e-468e-9461-82a57a371959" class="bulleted-list"><li style="list-style-type:disc">Microsoft Excel and Python for Data Wrangling<ul id="95b5ab99-5107-4105-8567-efae12d18f0d" class="bulleted-list"><li style="list-style-type:circle">Python Packages: <a href="https://matplotlib.org/">Matplotlib</a>, <a href="https://numpy.org/">Numpy</a>, <a href="https://pandas.pydata.org/">Pandas</a>,<a href="https://scikit-learn.org/stable/"> Scikit-learn</a></li></ul></li></ul><ul id="3d4d6009-9c32-4d88-8b1f-fef0fae2e909" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.tableau.com/">Tableau</a> to Create Visualizations</li></ul><ul id="a5fd8bcb-67f1-4355-a7bd-89de48c00f9c" class="bulleted-list"><li style="list-style-type:disc">Machine Learning Concepts for <a href="https://scikit-learn.org/stable/modules/tree.html">Classification</a></li></ul><h2 id="f3cf169e-1e2f-4c75-9dc4-20040ed30cd3" class="">Analysis</h2><p id="f678aa15-5115-4603-bdb3-7630312d2401" class="">The visualization of a decision tree is represented in a graph format, where each node represents a decision rule based on one or more input features, and each edge represents the possible outcomes of that decision. The tree is constructed recursively by splitting the dataset based on the best feature at each node until a stopping criterion is met, such as a maximum depth or the minimum number of samples per leaf.</p><p id="fb15c979-b0bc-4a4a-9c88-7365a6410de3" class="">In this specific tree, the goal is to predict the best indicator by looking at whether the country is developed or not based on 3 input features: Total Expenditure, Total Expenditure as a Percentage vs GDP, and Annual Growth Rate. The tree has a depth of 3 and contains a total of 10 nodes, with 5 leaf nodes that make the final predictions. It shows &quot;D&quot;  represents developed and &quot;e&quot; represents non-developed.</p><p id="2130afef-0790-4165-b049-53bed7e910d6" class="">The nodes in the tree are labeled with information about the decision rule at that point, including the feature being tested, the threshold for that feature, the Gini index (a measure of impurity or heterogeneity) of the samples at that node, the number of samples in each class, and the predicted class for that node based on the majority class of the samples. The edges are labeled with the condition that must be satisfied to follow that path in the tree.</p><figure id="d879e090-5098-433c-9284-1f5aea7a58c9" class="image"><a href="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/WhatsApp_Image_2023-02-14_at_22.43.50.jpeg"><img style="width:471px" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/WhatsApp_Image_2023-02-14_at_22.43.50.jpeg"/></a><figcaption>                   <strong>Decision Tree for Total Expenditure</strong></figcaption></figure><p id="aaa550df-503c-440f-9bfb-5901ef936394" class="">Based on this <strong>Decision Tree Classification</strong>, we can see that <em><strong>Total Expenditure</strong></em> is our deciding factor for the analysis then Total Expenditure vs GDP and Annual Growth comes.</p><h3 id="6adfa7f7-50f2-4a27-b33e-1a8c1318b066" class="">Question 1</h3><p id="b37d5bbb-7379-42f6-bc45-92f1d31cc42a" class=""><strong>How does the distribution of enrollment by gender differ across different program orientations, modes of study, and types of institutions in Canada for the Year 2020? Are there any significant trends or patterns in these differences?</strong></p><p id="9e3a8f5c-4956-4bac-87bb-63c0698fea7f" class="">To explore the distribution of enrollment by gender across different program orientations, modes of study, and types of institutions in Canada for the year 2020. </p><p id="9e509669-ee4e-4781-b822-7c2fa8512432" class=""><em><strong>“We must grow multiple pathways to success through an array of post-secondary options, including, of course, the rich array of some baccalaureate options and apprenticeships. ”</strong></em></p><p id="816b8314-cfd8-4cc8-a12a-08d71db40a07" class=""><strong> – Amy Loyd, President of the Kentucky Council on Postsecondary Education</strong></p><p id="c3ea8e68-4ade-4fe3-9eb7-37b454e88af1" class="">To analyze the insights gained from the visualization, we can consider the following:</p><ol type="1" id="16f11817-1f43-498d-97bf-83e18a795f22" class="numbered-list" start="1"><li>Overall, there is a slightly higher proportion of males for Full Time enrollment in post-secondary education in Canada than females.</li></ol><ol type="1" id="5783fe37-255c-49e6-84a4-0158235dbeee" class="numbered-list" start="2"><li>In general, there is an equal proportion of males and females enrolled in Bachelor and Doctoral levels while there are more males enrolled in Master’s for both all Public &amp; Private educational institutions and only in Public educational institutions for Full Time.</li></ol><ol type="1" id="e13ae490-e245-4111-b911-f7a88020387b" class="numbered-list" start="3"><li>The distribution of enrollment by gender varies significantly across different modes of study. For example, there are more females enrolled in part-time and distance education programs than in full-time programs.</li></ol><ol type="1" id="79826f89-f558-4a18-b58b-e4393a6bb27e" class="numbered-list" start="4"><li>Finally, the analysis can reveal any changes in enrollment patterns over time, such as whether there has been a shift toward the modes of study enrollment in certain fields or types of programs.</li></ol><figure id="a1735480-b75d-48e1-9f24-41923ae55a5c" class="image"><a href="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Ques1.png"><img style="width:2294px" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Ques1.png"/></a></figure><p id="020119b8-20d6-45a9-8534-f56ba4c279b0" class="">Overall, by analyzing these trends and patterns, anyone can gain insights into how gender differences in enrollment vary across different program orientations, modes of study, and types of institutions in Canada. This can help institutions of higher education to better understand the needs of their student population and make improvements to their recruitment and support efforts.</p><h3 id="02651812-93f0-4766-b5cc-35b964af65d7" class="">Question 2</h3><p id="a94d2f5b-f294-478e-b615-9f8e1dc9f0be" class=""><strong>How can Canadian institutions of higher education use these insights to better attract and support international students in different fields of study? </strong></p><p id="d4d4af4b-e366-45dc-80a5-8bc40b04adcd" class="">We need to analyze the data related to the enrollment of international students in different fields of study in Canada. We can start by analyzing the current trends in international student enrollment and their preferences for different fields of study. Canadian institutions of higher education can take the following actions to better attract and support international students in different fields of study:</p><p id="bd0850fd-afe7-466b-8ddb-66bd752e4fac" class="">For the IT sector fields, the major percentage of shares of international students is in Business, administration, and law. However, it is slightly decreasing over the years compared to ICT(Information and Communication Technology).</p><p id="e6752c2b-13eb-4905-8065-9c9fb2e571ac" class="">This visualization gives an insight into Generic Programmes and Agriculture Forestry have the lowest number of International Students.</p><p id="dc4f58b2-166d-4465-99da-e7ab1b2b02cc" class="">Canadian institutions can develop targeted strategies to better attract and support international students in Business, ICT, and Engineering fields.</p><figure id="9a32a2df-7f54-4ae6-9992-7397e66e6e12" class="image"><a href="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Ques2.png"><img style="width:2092px" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Ques2.png"/></a></figure><p id="19eaaa4d-016b-4cfc-adff-59a88dbd641a" class="">Overall, the insights gained from the analysis can help institutions identify areas where they need to focus their efforts to better attract and support international students in different fields of study. By doing so, they can create a more diverse and inclusive environment that supports the success of all students.</p><h3 id="5c3d99f9-a7d0-491b-83af-d53899bda5b4" class="">Question 3</h3><p id="fcf3a170-dd66-4bce-835f-a35929c93a9b" class=""><strong>How has education expenditure changed over time in different countries and fields of study in Canada&#x27;s education system?</strong></p><p id="756b3d2c-f022-48ae-820b-49ca1e953f06" class="">To analyze the changes in education expenditure over time in different countries and fields of study in Canada&#x27;s education system.</p><p id="f2a9b92a-8db6-4f66-90a7-5537b75e5163" class="">From this geographic map based on the year 2019, we can see the expenditure on education for different countries has increased and education expenditure is much more increased in the UK, Sweden, and Australia in comparison to other countries.</p><figure id="7ecec088-1070-4e0f-be08-8d1882d303d1" class="image"><a href="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Ques3.png"><img style="width:1774px" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Ques3.png"/></a></figure><p id="5935cc21-7151-4045-8620-882111d66ee7" class="">
+</p><p id="84ae92c9-275f-45f4-9290-c97be31fa7b2" class="">From 2008 to 2019, education expenditure has been increasing by Public and Private Institutions in Canada for Primary, Secondary, and Tertiary education levels.</p><p id="00c7d099-b8a7-436f-9ef5-9d4ae897c287" class="">However, there&#x27;s no significant change in expenditure for all different fields over the years in Canada&#x27;s Education landscape.</p><figure id="e92460d9-85d1-4e3b-a1af-9417f668ead8" class="image"><a href="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Canada_sheet__4.png"><img style="width:2394px" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Canada_sheet__4.png"/></a></figure><p id="4811926b-2b5b-4b59-8eb0-9537c8169c44" class="">Overall, by analyzing the changes in education expenditure over time in different countries and fields of study, Canadian institutions of higher education can better understand the education landscape and make informed decisions about attracting and supporting international students in different fields of study.</p><h3 id="f6f40937-45a2-46b0-83da-11f0740d35cf" class="">Question 4</h3><p id="0f095a36-b1a3-4cc4-b7f2-3aaf86264be9" class=""><strong>How has the annual growth rate in education expenditure from 2012 to 2019 varied across different countries?</strong></p><p id="dfa8236a-ecfb-4e58-8658-372079c26ba0" class="">The data includes the annual growth rate of education expenditure for each year for each country.</p><p id="30e28584-32d7-480a-87e9-14d606eaa2de" class="">By comparing the annual growth rates of education expenditure across different countries for each year to see which countries are investing more in education and which countries are lagging behind, found out that Portugal’s expenditure is drastically decreased.</p><p id="1d2ce4cd-227d-4c98-8d48-19666898d028" class="">A large number of expenditure is towards tertiary education by all countries in comparison to primary and secondary.</p><p id="cdb06b36-8429-4a9a-ada5-a2e0f1624d98" class="">Moreover, the annual growth rate in expenditure increment by a huge difference can be seen in Canada over the years in the given visualization.</p><figure id="69a07a9e-96c4-428b-8d2b-35223107b868" class="image"><a href="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/GDP_Expenditure.png"><img style="width:3116px" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/GDP_Expenditure.png"/></a></figure><p id="1955583f-84c5-40bf-99e0-546c7e1bfaf0" class="">Overall, the analysis of the annual growth rate in education expenditure can provide valuable insights into the investment patterns in education in different countries and fields of study over time. These insights can be used by policymakers and educational institutions to make informed decisions about investment in education and to identify areas that need more attention and resources.</p><h3 id="6336197e-589b-45dd-88df-1d44b555e2e1" class="">Question 5</h3><p id="3a0333ff-dbf7-4e7f-b507-e4384a840a15" class=""><strong>What is the total expenditure on educational institutions per full-time equivalent student in Canada at the sub-national level in 2019?</strong></p><p id="1e2b417e-7348-4acc-92b8-d6ddf243678d" class="">It shows the total expenditure on educational institutions per full-time equivalent student in Canada at the sub-national level for primary to upper secondary education in 2019. The expenditure is broken down by institution category (including public and private), and by region (different provinces and territories in Canada).</p><p id="0788e928-8234-45ed-aad0-6baf173da2f2" class="">The below data in a dashboard for Primary to Upper Secondary Education level filtered by Region in which we can see Northwest Territories has invested the highest amount compared to the rest of the regions.</p><p id="7c4565a1-cc48-48a1-9b21-6995e8193282" class="">Understanding the distribution of educational expenditures across different regions can help identify disparities in funding and support efforts to address these inequalities. It can also provide insights into the priorities and values of different regions and inform policy decisions on how best to allocate education funding to meet the needs of students and communities. Additionally, analyzing spending patterns across regions can help identify areas that may require additional investment or support in order to improve educational outcomes.</p><figure id="3352286c-1dba-4b7b-ab64-4ebe355c79b7" class="image"><a href="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Screenshot_2023-02-15_at_5.12.26_PM.png"><img style="width:1622px" src="Exploring%20the%20Canadian%20Education%20Landscape%20A%20Data-%2014c29d1c4281479db3e900b3796eec2e/Screenshot_2023-02-15_at_5.12.26_PM.png"/></a></figure><p id="59577da5-0f65-4d1f-bb67-9b386ecf8ba6" class="">Moreover, we can use this information to inform policy decisions and resource allocation at the provincial level to better support educational institutions and students in Canada.</p><h2 id="232de155-6151-4b50-a7a8-4ab835b8c2ea" class="">Problem Encountered</h2><ul id="712c02cc-f9f7-48bd-a76f-4a0a969a979e" class="bulleted-list"><li style="list-style-type:disc">Working with data for different countries, found that data is not available for all countries including India, South Africa, and more.</li></ul><ul id="4d437d5e-f138-47cf-bad5-ccb53c101b7d" class="bulleted-list"><li style="list-style-type:disc">Analyzing the expenditures on the field level for Canada, data is not available for all the fields.</li></ul><ul id="fc025398-52cf-4aa6-97d6-aef9c39b881c" class="bulleted-list"><li style="list-style-type:disc">Based on my analysis, data might be not recorded for all possible Genders.</li></ul><ul id="9b27ef2a-ade4-4e28-9d48-58ad507b798f" class="bulleted-list"><li style="list-style-type:disc">It could be better analyzed if OECD records the data for all available programmes in Canada.</li></ul><ul id="87efb124-114f-492b-b1bf-c1a5a1e6c6d8" class="bulleted-list"><li style="list-style-type:disc">Tried to trend analysis for growth rate change over the years for countries but due to missing/invalid data values, it ain’t possible. </li></ul><h2 id="2860d871-c08f-4bb2-b675-376f2e86418d" class="">Final Thoughts</h2><p id="bd92222a-e94e-4624-9677-2ad9ed72404e" class="">There has been a steady increase in the number of international students enrolling in Canadian institutions of higher education over the years, with the fields of study in Business, Administration, Law, ICT, and Engineering being the most popular among international students.</p><p id="952cfbcb-b313-499e-9dbc-b25a8cc0d691" class="">Education expenditure in different countries and fields of study in Canada&#x27;s education system has varied over time. The data shows that some countries have increased their education expenditure while others have decreased.</p><p id="89273d36-010e-46ec-80e5-dfc240a0ffeb" class="">The annual growth rate in education expenditure from 2012 to 2019 has varied across different countries. While some countries experienced high growth rates in education expenditure, others experienced low growth rates.</p><p id="660ece2e-4a3e-499f-8368-2db4336563c7" class="">In general, Canada&#x27;s education system seems to be thriving, with increased enrolments and expenditure in many areas. However, there is still room for improvement, particularly in terms of supporting international students and ensuring equal access to education across all provinces.</p><p id="7cabb465-8eb4-4358-ab5b-82dbfc55b89d" class="">Overall, these findings suggest that Canada&#x27;s education system is growing and evolving, with increasing international student enrollment and investments in education at both the national and sub-national levels. There is a need to continue tracking and analyzing trends in order to make informed decisions about how to support and improve the education system in Canada.</p><h2 id="ed6987d5-7ed2-480e-afd8-277b64afc1ff" class="">References</h2><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="9d431286-89b3-48cd-94fa-d0f4346973bb"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">Wolf, F., 2009. The division of labour in education funding: A cross-national comparison of public and private education expenditure in 28 OECD countries. <em>Acta Politica</em>, <em>44</em>, pp.50-73.</div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="3e06a25e-3107-45d2-b09a-33dfad19939a"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">Annabi, N., Harvey, S. and Lan, Y., 2011. Public expenditures on education, human capital and growth in Canada: An OLG model analysis. <em>Journal of Policy Modeling</em>
+, <em>33</em>(6), pp.852-865.</div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="d9b16d2c-e115-461c-bdbc-abd9313362bf"><div style="font-size:1.5em"><span class="icon">▫️</span></div><div style="width:100%">Tremblay, K., 2002. Student mobility between and towards OECD countries: a comparative analysis. <em>International mobility of the highly skilled</em>, pp.39-67.</div></figure><p id="4ffc934d-8bb1-47db-9384-c05de9d74d08" class="">
+</p></div></article></body></html>
